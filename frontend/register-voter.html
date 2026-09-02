@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Voter</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 380px;
+            background: #fff;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #475569;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #0f172a;
+            margin-top: 10px;
+        }
+
+        .secondary-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Register as Voter</h2>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="Enter your email" />
+        </div>
+
+        <button onclick="getOTP()">Get OTP</button>
+
+        <div id="otpSection" class="hidden">
+            <div class="input-group" style="margin-top:15px;">
+                <label>Enter OTP</label>
+                <input type="text" id="otp" placeholder="Enter OTP" />
+            </div>
+
+            <button onclick="verifyOTP()">Verify OTP</button>//function call on click
+        </div>
+
+        <div id="registerSection" class="hidden">
+            <button style="margin-top:15px;" onclick="register()">Register</button>
+        </div>
+
+        <button class="secondary-btn" onclick="goBack()">Back</button>
+
+    </div>
+
+    <script>
+        let isOtpVerified = false;
+
+        async function getOTP() {
+            const email = document.getElementById("email").value;
+
+            if (!email) {
+                alert("Enter email");
+                return;
+            }
+
+            const res = await fetch("http://your-ec2-url/api/auth/send-otp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                alert("OTP sent");
+                document.getElementById("otpSection").classList.remove("hidden");
+            } else {
+                alert(data.message);
+            }
+        }
+
+
+
+        async function verifyOTP() {
+            const email = document.getElementById("email").value;
+            const otp = document.getElementById("otp").value;
+
+            const res = await fetch("http://your-ec2-url/api/auth/verify-otp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, otp })
+            });
+
+            const data = await res.json();
+
+
+            if (data.success) {
+                // OPTIONAL: call register API automatically
+                await fetch("http://your-ec2-url/api/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                alert("Registered successfully");
+
+                // redirect to login page
+                window.location.href = "login-voter.html";
+            } else {
+                alert("Invalid OTP");
+            }
+        }
+
+        function register() {
+            if (!isOtpVerified) {
+                alert("Verify OTP first");
+                return;
+            }
+
+            const email = document.getElementById("email").value;
+
+            // CALL REGISTER API HERE
+            console.log("Register user:", email);
+
+            alert("Registered successfully");
+
+            // redirect to login page
+            window.location.href = "login-voter.html";
+        }
+
+        function goBack() {
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+
+</html>

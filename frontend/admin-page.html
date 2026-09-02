@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    body{
+      font-family: Arial;
+      background:#f5f5f5;
+    }
+
+    nav{
+      display:flex;
+      justify-content:space-between;
+      padding:15px;
+      background:#222;
+      color:white;
+    }
+
+    #candidateContainer{
+      padding:20px;
+    }
+
+    .card{
+      display:flex;
+      align-items:center;
+      background:white;
+      padding:15px;
+      margin-bottom:15px;
+      border-radius:8px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .card img{
+      width:90px;
+      height:90px;
+      border-radius:6px;
+      margin-right:20px;
+    }
+
+    .info{
+      flex:1;
+    }
+
+    .buttons button{
+      margin-right:10px;
+      padding:6px 12px;
+      cursor:pointer;
+    }
+
+    .id{
+      font-size:11px;
+      color:gray;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <h2>Admin Dashboard</h2>
+  <div id="serverInfo"></div>
+  <button onclick="logout()">Logout</button>
+</nav>
+
+<div id="candidateContainer"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="admin-page.js"></script>
+
+</body>
+</html>
+
+

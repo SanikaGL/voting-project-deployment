@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voting Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    p {
+      margin-bottom: 40px;
+      color: #94a3b8;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 220px);
+      gap: 25px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .card h3 {
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .card span {
+      font-size: 14px;
+      color: #cbd5f5;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Online Voting System</h1>
+  <p>Select an option to continue</p>
+
+  <div class="container">
+
+    <div class="card" onclick="navigate('register-voter.html')">
+      <h3>Register as Voter</h3>
+      <span>Create voter account</span>
+    </div>
+
+    <div class="card" onclick="navigate('register-candidate.html')">
+      <h3>Register as Candidate</h3>
+      <span>Apply as candidate</span>
+    </div>
+
+    <div class="card" onclick="navigate('login-voter.html')">
+      <h3>Login as Voter</h3>
+      <span>Access voting panel</span>
+    </div>
+
+    <div class="card" onclick="navigate('login-candidate.html')">
+      <h3>Login as Candidate</h3>
+      <span>Manage your profile</span>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 Voting System
+  </footer>
+
+  <script>
+    function navigate(page) {
+      window.location.href = page;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Registration</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+
+    body {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    }
+
+    .navbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 22px;
+      background:rgba(255,255,255,0.75);
+      backdrop-filter:blur(10px);
+    }
+
+    .nav-links a {
+      margin-left:18px;
+      text-decoration:none;
+      color:#475569;
+    }
+
+    .wrapper {
+      flex:1;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .card {
+      width:100%;
+      max-width:420px;
+      background:#fff;
+      padding:26px;
+      border-radius:18px;
+      box-shadow:0 15px 40px rgba(0,0,0,0.08);
+    }
+
+    h2 { text-align:center; margin-bottom:18px; }
+
+    .input-group { margin-bottom:12px; }
+
+    label { font-size:13px; color:#475569; display:block; margin-bottom:5px; }
+
+    input, textarea {
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid #c7d2fe;
+      background:#f8fafc;
+    }
+
+    textarea { height:90px; resize:none; }
+
+    button {
+      width:100%;
+      padding:11px;
+      border:none;
+      border-radius:10px;
+      background:linear-gradient(135deg,#6366f1,#a855f7);
+      color:white;
+      cursor:pointer;
+      margin-top:8px;
+    }
+
+    .hidden { display:none; }
+
+    .login-link {
+      text-align:center;
+      margin-top:12px;
+      font-size:13px;
+    }
+
+    .login-link a { color:#7c3aed; text-decoration:none; }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div>Voting System</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="#">Help</a>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="card">
+      <h2>Candidate Registration</h2>
+
+      <div class="input-group">
+        <label>Name</label>
+        <input type="text" id="name" placeholder="Enter name" />
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter email" />
+      </div>
+
+      <div class="input-group">
+        <label>Upload Photo</label>
+        <input type="file" id="photo" accept="image/*" />
+      </div>
+
+      <div class="input-group">
+        <label>Description</label>
+        <textarea id="description" placeholder="Enter description"></textarea>
+      </div>
+
+      <button onclick="sendOTP()">Get OTP</button>
+
+      <div id="otpSection" class="hidden">
+        <div class="input-group" style="margin-top:10px;">
+          <label>Enter OTP</label>
+          <input type="text" id="otp" placeholder="Enter OTP" />
+        </div>
+
+        <button onclick="verifyOTP()">Verify OTP & Register</button>
+      </div>
+
+      <div class="login-link">
+        Already registered? <a href="login-candidate.html">Login</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    async function sendOTP() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const photo = document.getElementById("photo").files[0];
+      const description = document.getElementById("description").value;
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("photo", photo);
+      formData.append("description", description);
+
+      const res = await fetch("http://your-ec2-url/api/candidate/send-otp", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("OTP sent");
+        document.getElementById("otpSection").classList.remove("hidden");
+      } else {
+        alert(data.message);
+      }
+    }
+
+    async function verifyOTP() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const photo = document.getElementById("photo").files[0];
+      const description = document.getElementById("description").value;
+      const otp = document.getElementById("otp").value;
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("photo", photo);
+      formData.append("description", description);
+      formData.append("otp", otp);
+
+      const res = await fetch("http://your-ec2-url/api/candidate/verify-otp", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Registered successfully");
+        window.location.href = "login-candidate.html";
+      } else {
+        alert(data.message);
+      }
+    }
+  </script>
+
+</body>
+</html>

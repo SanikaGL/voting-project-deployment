@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f4f6f8;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        text-align: center;
+        width: 280px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #007bff;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #0056b3;
+    }
+</style>
+
+
+</head>
+
+<body>
+
+
+<div class="container">
+    <h2>Admin Login</h2>
+
+
+<input type="password" id="password">
+<button onclick="login()">Login</button>
+
+
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", async () => {
+
+    try {
+
+        const res = await fetch(
+            "http://127.0.0.1:5000/admin-login/check-auth",
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+        
+
+        if (res.status==201) {
+
+            // 200 → JWT valid + role is admin
+            window.location.href =
+                "http://127.0.0.1:3000/frontend/admin-page.html";
+
+            return;
+        }
+
+        if (res.status === 401) {
+
+            // No token OR expired/invalid token
+            console.log("Not authenticated");
+            return;
+        }
+
+        if (res.status === 403) {
+
+            // Token valid, but not an admin
+            console.log("User is not an admin");
+            return;
+        }
+
+        console.log("Unexpected response:", res.status);
+
+    } catch (error) {
+
+        console.error("Authentication check failed:", error);
+    }
+});
+
+async function login() {
+    const password = document.getElementById("password").value;
+
+    const res = await fetch("http://127.0.0.1:5000/admin-login/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password }),
+        credentials: "include"
+    });
+    console.log("res reached frontend after fetch")
+    const text = await res.text();
+    if (text=="rong password") {
+        alert(text);
+        console.log("wrong password");
+        return;
+    }
+    console.log("login status:", res.status);
+    if (!res.ok) {
+    const text = await res.text();
+    console.log("Login failed:", text);
+    return;
+}
+
+
+    window.location.href = "http://127.0.0.1:3000/frontend/admin-page.html";
+
+    // 🔥 Replace entire page with response
+    // const html = await res.text();
+    // document.open();
+    // document.write(html);
+    // document.close();
+}
+</script>
+
+</body>
+</html>

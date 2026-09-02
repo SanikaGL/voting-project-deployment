@@ -1,0 +1,8 @@
+# Backend node modules
+backend/node_modules/
+
+# Backend environment file
+backend/.env
+
+# Optional logs
+*.log
