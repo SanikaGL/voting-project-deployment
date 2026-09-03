@@ -24,7 +24,7 @@ app.use(cookieParser());
 io.on("connection", (socket) => {
    console.log("A client connected to socket:", socket.id);
 });// when in frontend uses io it executes this 
-console.log("🔥 REACHED SERVER.LISTEN");
+console.log("🔥 REACHED SERVER.LISTEN ");
 
 server.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
