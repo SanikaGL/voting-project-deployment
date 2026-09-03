@@ -7,13 +7,40 @@ on:
     paths:
       - 'backend/**'
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Get the code from your GitHub repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Build Docker image
       - name: Build Docker image
         run: docker build -t voting-backend ./backend
+
+      # 3. Get temporary AWS credentials using GitHub OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::390844784470:role/voting-backend-role
+          aws-region: ap-south-1
+
+      # 4. Login Docker to Amazon ECR
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 5. Give the Docker image your ECR repository address
+      - name: Tag Docker image
+        run: |
+          docker tag voting-backend:latest 390844784470.dkr.ecr.ap-south-1.amazonaws.com/voting-backend-ecr
+
+      # 6. Push Docker image to ECR
+      - name: Push Docker image to ECR
+        run: |
+          docker push 390844784470.dkr.ecr.ap-south-1.amazonaws.com/voting-backend-ecr
