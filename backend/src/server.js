@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 console.log("🔥 REACHED SERVER.LISTEN");
 
 console.log(process.env.MONGO_URL);
-console.log("🔥 REACHED SERVER.LISTEN");
+console.log("🔥REACHED SERVER.LISTEN");
 
 
 const cookieParser = require("cookie-parser");
