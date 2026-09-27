@@ -16,7 +16,7 @@ const cors = require("cors");
 const path = require("path");
 
 app.use(cors({ 
-    origin: "http://127.0.0.1:3000 ",   // allow requests from frontend origin as frontend is in port 3000 and backend is in 5000
+    origin: "http://127.0.0.1:3000",   // allow requests from frontend origin as frontend is in port 3000 and backend is in 5000
     credentials: true //allow cookies or auth data to be sent
 }));
 app.use(cookieParser());//middleware to read cookies from incoming requests
